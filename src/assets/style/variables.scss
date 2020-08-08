@@ -1,0 +1,44 @@
+
+$primary-color:#0bb2d4;
+//sidebar
+$menuBg:#37474F;
+$subMenuBg:#2f3d45;
+$menuHover:#263238;
+
+$themes: (
+  0BB2D4: (
+    primary: #0BB2D4,
+    navMenuActive:#0099B8
+  ),
+  F2353C: (
+    primary: #9463F7,
+    navMenuActive:#8349F5
+  ),
+  DC5D03: (
+    primary: #DC5D03,
+    navMenuActive:#CE5601
+  ),
+  9463F7:(
+    primary: #9463F7,
+    navMenuActive:#8349F5
+  )
+);
+
+@mixin themify($themes: $themes) {
+    @each $theme-name, $map in $themes {
+      .theme-#{$theme-name} & {
+        $theme-map: () !global;
+        @each $key, $value in $map {
+          $theme-map: map-merge($theme-map, ($key: $value)) !global;
+        }
+  
+        @content;
+  
+        $theme-map: null !global;
+      }
+    }
+}
+  
+@function themed($key) {
+    @return map-get($theme-map, $key);
+}
