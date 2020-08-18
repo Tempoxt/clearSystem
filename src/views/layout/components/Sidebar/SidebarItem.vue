@@ -9,9 +9,9 @@
         <span slot="title">{{onlyOneChild.name}}</span>
       </el-menu-item>
     </template> -->
-    <el-menu-item>
+    <!-- <el-menu-item>
       <span slot="title">文档</span>
-    </el-menu-item>
+    </el-menu-item> -->
     <template>
       <router-link  v-for="(item, index) in menusList" :key="index" :to="item.route" >
           <el-menu-item :index="item.route">
@@ -82,13 +82,15 @@ export default {
   data() {
     return {
       onlyOneChild: null,
+      // menusLists: [
+      //   { icon: 'icon-bumenwendang', title: '我的文档', act: false, route: '/myDoc' },
+      //   { icon: 'icon-wenjian', title: '我的创建', act: false, route: '/create' },
+      //   { icon: 'icon-fenxiang', title: '我的共享', act: false, route: '/share' },
+      //   { icon: 'icon-shenhe', title: '我的审核', act: false, route: '/verify' },
+      //   { icon: 'icon-shijian', title: '历史查看', act: false, route: '/history' },
+      //   { icon: 'icon-quanxian', title: '权限设置', act: false, route: '/right' }
+      // ]
       menusLists: [
-        { icon: 'icon-bumenwendang', title: '我的文档', act: false, route: '/myDoc' },
-        { icon: 'icon-wenjian', title: '我的创建', act: false, route: '/create' },
-        { icon: 'icon-fenxiang', title: '我的共享', act: false, route: '/share' },
-        { icon: 'icon-shenhe', title: '我的审核', act: false, route: '/verify' },
-        { icon: 'icon-shijian', title: '历史查看', act: false, route: '/history' },
-        { icon: 'icon-quanxian', title: '权限设置', act: false, route: '/right' }
       ]
     };
   },
@@ -96,16 +98,16 @@ export default {
     console.log(qs.parse(auth.getLogInfo()))
   },
   computed: {
-    menusList() {
-      let data = qs.parse(auth.getLogInfo()).route_msg
-      let arr = []
-      data.forEach((item, index) => {
-        this.menusLists.forEach((i, d) => {
-          if (i.route.indexOf(item) !== -1) arr.push(i)
-        })
-      })
-      return arr
-    }
+    // menusList() {
+    //   let data = qs.parse(auth.getLogInfo()).route_msg
+    //   let arr = []
+    //   data.forEach((item, index) => {
+    //     this.menusLists.forEach((i, d) => {
+    //       if (i.route.indexOf(item) !== -1) arr.push(i)
+    //     })
+    //   })
+    //   return arr
+    // }
   },
   // methods: {
   //   hasOneShowingChild(children = [], parent) {

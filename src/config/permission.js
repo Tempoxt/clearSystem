@@ -26,7 +26,7 @@ let req = async (tk, next) => {
     store.commit("user/login", token);
     console.log(auth.getToken())
     next({
-      path: '/myDoc'
+      path: '/home'
     })
     return
 
@@ -55,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
     window.location = process.env.VUE_APP_EIP
   } else if (auth.getToken() && to.path === '/') {
     next({
-      path: '/myDoc'
+      path: '/home'
     })
     return
   }
