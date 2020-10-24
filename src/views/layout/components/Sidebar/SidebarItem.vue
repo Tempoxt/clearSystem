@@ -82,15 +82,9 @@ export default {
   data() {
     return {
       onlyOneChild: null,
-      // menusLists: [
-      //   { icon: 'icon-bumenwendang', title: '我的文档', act: false, route: '/myDoc' },
-      //   { icon: 'icon-wenjian', title: '我的创建', act: false, route: '/create' },
-      //   { icon: 'icon-fenxiang', title: '我的共享', act: false, route: '/share' },
-      //   { icon: 'icon-shenhe', title: '我的审核', act: false, route: '/verify' },
-      //   { icon: 'icon-shijian', title: '历史查看', act: false, route: '/history' },
-      //   { icon: 'icon-quanxian', title: '权限设置', act: false, route: '/right' }
-      // ]
-      menusLists: [
+      menusList: [
+        { icon: 'icon-bumenwendang', title: '图例集合', act: false, route: '/home' },
+        { icon: 'icon-bumenwendang', title: '富文本', act: false, route: '/rich_text' }
       ]
     };
   },

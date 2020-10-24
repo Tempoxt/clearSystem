@@ -19,12 +19,21 @@ let router = new Router({
       },
       children: [
         {
-          name: '首页',
+          name: '图例集合',
           path: '/home',
-          component: () => import('./views/Home'),
+          component: () => import('@/views/default/home'),
           meta: {
             requiresAuth: true,
-            title: '首页'
+            title: '图例集合'
+          }
+        },
+        {
+          name: '富文本',
+          path: '/rich_text',
+          component: () => import('@/views/default/rich'),
+          meta: {
+            requiresAuth: true,
+            title: '富文本'
           }
         }
       ]

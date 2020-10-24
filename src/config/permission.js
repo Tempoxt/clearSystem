@@ -10,27 +10,27 @@ const createdRouterHash = (router) => {
 
 }
 let req = async (tk, next) => {
-  let userInfo = await request.get('/doc/erp/login', {
-    params: { token: tk }
-  })
-  if (userInfo.code !== 0) {
-    Message({ type: 'error', message: userInfo.msg })
-    setTimeout(() => {
-      window.location = process.env.VUE_APP_EIP
-    }, 2000);
-  } else {
-    // Message({ type: 'success', message: userInfo.msg })
-    const { token } = userInfo.data;
+  // let userInfo = await request.get('/doc/erp/login', {
+  //   params: { token: tk }
+  // })
+  // if (userInfo.code !== 0) {
+  //   Message({ type: 'error', message: userInfo.msg })
+  //   setTimeout(() => {
+  //     window.location = process.env.VUE_APP_EIP
+  //   }, 2000);
+  // } else {
+  //   // Message({ type: 'success', message: userInfo.msg })
+  //   const { token } = userInfo.data;
 
-    store.commit("user/SET_LOGINFO", userInfo.data);
-    store.commit("user/login", token);
-    console.log(auth.getToken())
+  //   store.commit("user/SET_LOGINFO", userInfo.data);
+  //   store.commit("user/login", token);
+  //   console.log(auth.getToken())
     next({
       path: '/home'
     })
     return
 
-  }
+  // }
 }
 router.beforeEach(async (to, from, next) => {
 
@@ -52,7 +52,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
   if (!auth.getToken()) {
-    window.location = process.env.VUE_APP_EIP
+    // window.location = process.env.VUE_APP_EIP
   } else if (auth.getToken() && to.path === '/') {
     next({
       path: '/home'
