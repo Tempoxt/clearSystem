@@ -6,7 +6,7 @@
           <el-button-group v-if="item.type === 'buttonGroup'">
             <template v-for="(i, d) in item.data">
               <el-button v-if="!('type' in i) && d < 6" :key="d" :size="table.size"
-                :disabled="(i.isSelect && table.selectArr.length === 0) || (i.isSelects && (table.selectArr.length === 0 || table.selectArr.length > 1))"
+                :disabled="i.disabled ||(i.isSelect && table.selectArr.length === 0) || (i.isSelects && (table.selectArr.length === 0 || table.selectArr.length > 1))"
                 @click="handlerCb(i.func)">
                 <i v-if="i.icon" class="icon iconfont" :class="[i.icon]"></i>
                 {{ i.text ? i.text : null}}
@@ -17,7 +17,7 @@
                   <el-checkbox v-model="showList[num].check" @change="resizeTable">{{ item.title }}</el-checkbox>
                 </div>
                 <el-button slot="reference" :size="table.size"
-                  :disabled="(i.isSelect && table.selectArr.length === 0) || (i.isSelects && (table.selectArr.length === 0 || table.selectArr.length > 1))">
+                  :disabled="i.disabled ||(i.isSelect && table.selectArr.length === 0) || (i.isSelects && (table.selectArr.length === 0 || table.selectArr.length > 1))">
                   <i v-if="i.icon" class="icon iconfont" :class="[i.icon]"></i>
                   {{ i.text ? i.text : null}}
                 </el-button>
@@ -29,7 +29,7 @@
                 <el-dropdown-menu slot="dropdown">
                   <template v-for="(i, d) in item.data">
                     <el-button v-if="d > 5" class="more" :key="d" :size="table.size"
-                      :disabled="(i.isSelect && table.selectArr.length === 0) || (i.isSelects && (table.selectArr.length === 0 || table.selectArr.length > 1))"
+                      :disabled="i.disabled ||(i.isSelect && table.selectArr.length === 0) || (i.isSelects && (table.selectArr.length === 0 || table.selectArr.length > 1))"
                       @click="handlerCb(i.func)">
                       <i v-if="i.icon" class="icon iconfont" :class="[i.icon]"></i>
                       {{ i.text ? i.text : null}}
@@ -76,10 +76,11 @@
             </el-date-picker>
           </div>
           <div v-if="item.type === 'manySearch'">
-            <el-input :placeholder="item.holder" v-model="item.value" class="input-with-select"
+            <el-input :placeholder="typeof item.holder === 'object' ? item.holder[item.optionValue] ? item.holder[item.optionValue] : '' : item.holder" v-model="item.value" class="input-with-select"
             @blur="search(item.optionValue, item.value)" @keypress.enter.native="$event.target.blur()">
               <el-select v-model="item.optionValue" slot="prepend" placeholder="请选择"
                 class="many_input"
+                @change="item.value = undefined"
               >
                 <el-option v-for="(i, n) in item.option" :key="n" :label="i.label" :value="i.value"></el-option>
               </el-select>
@@ -107,7 +108,7 @@
               <el-tooltip class="item" effect="dark"
                 :disabled="scope.row[column.keys] === '' || scope.row[column.keys] === null || showTip"
                 :content="scope.row[column.keys] === '' || scope.row[column.keys] === null ? '-' : String(scope.row[column.keys])"
-                placement="bottom">
+                placement="bottom-start">
                 <span
                   @mousemove="isOverFlow">{{scope.row[column.keys] === '' || scope.row[column.keys] === null ? '-' : scope.row[column.keys]}}</span>
               </el-tooltip>
@@ -261,7 +262,7 @@
           </el-table-column>
           <el-table-column v-if="column.type === 'tags' && showList[num].check" :label="column.title"
             :key="column.title" :width="column.width ? column.width : table.width ? table.width : ''"
-            :fixed="column.fixed">
+            :fixed="column.fixed" :sortable="column.sort ? column.sort : false" :prop="column.keys">
             <template slot-scope="scope">
               <el-tag size="medium"
                 :type="scope.row[column.keys] !== null ? scope.row[column.keys] in column.options ? column.options[scope.row[column.keys]].color : '' : ''">
@@ -330,10 +331,10 @@
       test(data) {
         console.log(data);
       },
-      resizeTable() {
+      resizeTable(delay = 2000) {
         setTimeout(() => {
           this.$refs.tab.doLayout()
-        }, 2000)
+        }, delay)
       },
       isOverFlow(e) {
         if (e.target.parentNode.scrollWidth > e.target.parentNode.offsetWidth) return this.showTip = false
@@ -382,7 +383,13 @@
       selectChange(val) {
         this.$emit("selectChange", val);
       },
-      sortChange(column, prop, order) {
+      async sortChange(column, prop, order) {
+        let table = JSON.parse(JSON.stringify(this.table))
+        table['sort_prop'] = column.prop
+        table['sort_order'] = column.order
+        console.log(table)
+        await Promise.resolve(this.$emit('update:table', table))
+        console.log(column, this.table)
         this.$emit("sortChange", column, prop, order)
       },
       // 表格列全选
